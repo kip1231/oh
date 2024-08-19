@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Retrieval</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="message" id="message">{{ message | safe }}</div>
+        {% if key %}
+        <div class="button-container">
+            <button class="copy-button" onclick="copyKey()">Copy Key</button>
+            <img src="{{ url_for('static', filename='info.png') }}" alt="Info" class="info-icon" onclick="openModal()">
+        </div>
+        <input type="text" id="key" value="{{ key }}" class="hidden">
+        {% else %}
+        <div class="button-container">
+		    <img src="{{ url_for('static', filename='info.png') }}" alt="Info" class="info-icon" onclick="openModal()">
+        </div>
+        {% endif %}
+    </div>
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>О нас</h2>
+            <p>test</p>
+            <p>test</p>
+            <div class="switch">
+                <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
+            </div>
+            <div class="social-icons">
+                <img src="{{ url_for('static', filename='YouTube.png') }}" alt="YouTube" class="social-icon" onclick="window.open('https://youtube.com/@Krutoy-Suslik?si=bbHI3pnaVV9YV-it', '_blank')">
+                <img src="{{ url_for('static', filename='DiscordHorny.png') }}" alt="Discord" class="social-icon" onclick="window.open('https://discord.com/invite/zschDHZ6SK', '_blank')">
+                <img src="{{ url_for('static', filename='telegram.png') }}" alt="Telegram" class="social-icon" onclick="window.open('https://t.me/KrutoySuslik', '_blank')">
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedTheme = localStorage.getItem('theme') || 'light-mode';
+            document.body.classList.add(savedTheme);
+            document.getElementById('themeSwitch').checked = savedTheme === 'dark-mode';
+        });
+        function copyKey() {
+            const keyInput = document.getElementById('key');
+            keyInput.classList.remove('hidden');
+            keyInput.select();
+            document.execCommand('copy');
+            keyInput.classList.add('hidden');
+            alert('Key copied to clipboard');
+        }
+        function openModal() {
+            document.getElementById('aboutModal').style.display = "block";
+        }
+        function closeModal() {
+            document.getElementById('aboutModal').style.display = "none";
+        }
+        function toggleTheme() {
+            if (document.body.classList.contains('light-mode')) {
+                document.body.classList.remove('light-mode');
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light-mode');
+            }
+        }
+        window.onclick = function(event) {
+            const modal = document.getElementById('aboutModal');
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
